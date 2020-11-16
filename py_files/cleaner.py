@@ -25,11 +25,11 @@ def mr_clean_and_tokenize(text):
         #English stopwords
     stop_words = stopwords.words('english')
         #Add your stopwords in a list
-    additional_stop_words = ['rt', 'https']
+    additional_stop_words = ['rt', 'https', 'great','get', 'thank']
     stop_words.extend(additional_stop_words)
         #Add Multiword phrases. Add to multiwords so not deleted by .isalnum()
-    mwe_tokenizer = MWETokenizer([('make','america','great','again'),('america','first')])
-    multiwords = ['make_america_great_again', 'america_first']
+    mwe_tokenizer = MWETokenizer([('make','america','great','again'),('america','first'), ('fake_news')])
+    multiwords = ['make_america_great_again', 'america_first','fake_news']
     
     
         #Begin cleaning

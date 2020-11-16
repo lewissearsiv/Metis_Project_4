@@ -15,9 +15,9 @@ from nltk import word_tokenize,sent_tokenize
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer
 
-def Vectorizer_I_Hardly_Know_Her(cleaned_text):
+def Vectorizer_I_Hardly_Know_Her(cleaned_text, min_word):
     '''The input cleaned_text must be an array with each entry tokenized and 
-    cleaned text. 
+    cleaned text and a threshold for the word. 
     The second part allows you to determine how many instances of a word
     justifies consideration.
     '''
@@ -32,7 +32,28 @@ def Vectorizer_I_Hardly_Know_Her(cleaned_text):
     important_words = [] 
     for i in range(len(col_sums)):
         #Give a threshhold minimum value
-        if col_sums[i] > 15:
+        if col_sums[i] > min_word:
+            important_words.append(col_sums.index[i])
+
+    #final dataframe
+    return df_vectorized[important_words]
+
+def Vectorizer_I_Hardly_Know_Her_2(cleaned_text, min_word, max_word):
+    '''This is the same as the previous function with an upper bound 
+    '''
+    #Make a NLTK CountVectorizer DataFrame
+    cv = CountVectorizer(analyzer=lambda x:x)
+    vectorized_words = cv.fit_transform(cleaned_text).toarray()
+    col_names = cv.get_feature_names()
+    df_vectorized = pd.DataFrame(vectorized_words, columns = col_names)
+
+    #Filtering out sparse words
+    col_sums = df_vectorized.sum(axis = 0)
+    important_words = []
+    #Words that appear too much
+    for i in range(len(col_sums)):
+        #Give a threshhold minimum and maximum value
+        if col_sums[i] > min_word and col_sums[i] < max_word:
             important_words.append(col_sums.index[i])
 
     #final dataframe
